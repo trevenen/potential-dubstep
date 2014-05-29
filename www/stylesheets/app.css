@@ -1,0 +1,1088 @@
+@font-face {
+  font-family: 'Pacifico';
+  font-style: normal;
+  src: url(fonts/Pacifico.ttf);
+}
+
+body {
+
+  /* Disable Safari scrollbars, because jQuery Mobile annoyingly insists on setting the
+     min-height of the page to 320px. It does this (unsuccessfully, in 1.0.1, but successfully
+     in 1.1) in order to keep the Mobile Safari location bar from appearing during page
+     transitions. But this causes a problem in desktop Safari if the height is <320px.
+     If you resize to <320 in a desktop browser, you will see a scrollbar if you don't
+     use this style.
+
+     I haven't put this in jquery.mobile.iscrollview.css, because it has to be applied
+     to <body>, and so it will affect the entire site/app. It is an appropriate
+     setting for any site/app meant to use a page size fixed at the browser window size.
+     If your site/app mixes fixed-height pages with scrolling pages, you will need to
+     work out another solution. */
+  overflow:hidden;
+
+  /* optimizeSpeed is the default. Using optimizeLegibility here will typically DOUBLE
+     rendering time! So, think twice about using optimizeLegibility */
+  text-rendering: optimizeSpeed;
+
+  /* subpixel-antialiased is the default, but you might like to use antialiased for a thinner look
+     in Safari. There is no speed penalty for this, nor a speed advantage for "none", which looks
+     absolutely terrible... */
+  -webkit-font-smoothing: subpixel-antialiased;
+
+  /* Shut off long touch on links for info. If this is set to "default", then a long touch
+     on a link will display the URL in a popup. This is pretty darn annoying. */
+  -webkit-touch-callout: none;
+
+  /* Shut off content selection, because it's really annoying when dragging
+     You might like to do this only for scroller content, though, or enable it for certain
+     text you want the user to be able to cut-and-paste */
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  background-color: #fff !important;
+  font-family: "Myriad Pro"; 
+  }
+
+/* Style header bar and footer bar with a 1px red border at top and bottom. This facilitates
+   a quick visual indication of correct sizing of the page. You should not see any white
+   space above the header or below the footer. (Note that Retina devices will show a 2px border,
+   rather than 1px.) Use your OS's accessibility features to magnify and inspect. On mobile
+   devices, there is usually a way to capture the screen contents to an image file that you can
+   later examine. (iPhone: Home+On/Off)
+*/
+
+.ui-header.ui-bar-a,
+.ui-footer.ui-bar-a {
+    /*border-top: 1px solid #ff0000;
+    border-bottom: 1px solid #ff0000;*/
+}
+
+.ui-page {
+    background: url('../images/rain_bg.jpg') top center no-repeat;
+    background-size: auto 100%;
+}
+
+.ui-header {
+    height: 50px;
+    /*background: url('../images/header_bg.png') top left no-repeat;
+    background-size: 100% 100%;*/
+    /*border-bottom: 4px solid #df432d !important;
+    position: fixed !important;*/
+    top: -1px !important;
+    padding-top: 1px !important;
+}
+
+/*.ui-content {
+    background: url('../images/content_bg.png') top left no-repeat;
+    background-size: 100% 100%;
+    position: absolute;
+    top: 55px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+}*/
+
+/* make room for version buttons in header */
+.ui-header .ui-title {
+  /*text-align: left;
+  margin-left: 10px;*/
+}
+
+.ui-footer{
+    background-color: #fff !important;
+    border-top: 5px solid #de432f !important;
+    border-bottom: 7px solid #231b1a !important;
+}
+
+/* Style iScroll wrapper with a 1px green border at top and bottom. You should see no gap
+   or different color between the top of the wrapper and the bottom of the header, or between
+   the bottom of the wrapper and the top of the footer.
+*/
+.iscroll-wrapper {
+  /*border-top: 1px solid #00ff00;
+  border-bottom: 1px solid #00ff00;*/
+}
+
+
+
+
+.ui-navbar a {
+  /* For demo, make portrait navbar the same height as iPhone tabbar, because using the
+     standard navbar height for portrait and a shorter navbar for landscape would make
+     the navbar unusably short. */
+     /*height: 47px;    /* + 2px margins = 49px */
+}
+
+.ui-navbar .ui-btn-inner {
+  font-size: 14px;
+}
+
+@media only screen and (max-height: 280px){
+  .ui-header {
+    height: 30px;
+  }
+
+  .ui-header .ui-title {
+    font-size: 14px;
+  }
+
+  /* Make the buttons in the header just disappear - they're too big for a tiny header */
+  .ui-header .ui-btn {
+    display: none;
+  }
+
+  .ui-navbar a {
+    height: 37px;    /* + 2px border = 39px */
+  }
+
+  .ui-navbar .ui-btn-inner {
+    font-size: 13px;
+  }
+}
+
+/* Force list items to be cached on WebKit
+   See: cubiq.org/you-shall-not-flicker
+
+   If this is NOT used, then scrolling long lists might exhibit a "flicker" when scrolling
+   toward the bottom of the list, as well as exhibit slow and jerky until the first
+   time the user has reached the bottom of the list.
+
+   If this IS used, then the browser may be forced to cache the content in advance, resulting
+   in smoother scrolling, but with the side-effect of increasing initial rendering time.
+
+   This can more than DOUBLE initial rendering time if you are not careful with the selector. The
+   recommended CSS at the above link is NOT optimal.
+
+   You need to apply this judiciously. For example, if you know your scroller content consists
+   of list items, use "li" not "*' to select. * as the right-most component of a select is
+   horribly expensive. A small additional performance gain can be made by selecting
+   iscroll-content instead of iscroll-scroller. You might get a
+   glitch on a pull-up if you have one, but it's a small price to pay for doubling speed.
+
+   It is important NOT to apply this to .iscroll-scroller itself. This will result in a huge
+   performance loss. The second rule below gives performance on iOS devices very close to not
+   using this at all.
+
+   I use an @media tag to disable, because it is a safe way of disabling CSS that might contain
+   comments. As well, you might like to enable this only for certain devices, which often
+   can be detected using media queries.
+
+*/
+
+/* This one will always work to eliminate the flicker, regardless of scroller content but
+   is very slow at initial rendering. The scroller may not be initially responsive after
+   a page is first rendered */
+@media DISABLED {
+  .iscroll-scroller,
+  .iscroll-scroller * {
+    -webkit-transform: translateZ(0);
+  }
+}
+
+/* So, for the demo, I'm using this one, which doesn't target the scroller itself, and
+   targets specific top-level elements inside the scroller. */
+@media all {
+  .iscroll-content li  {
+    -webkit-transform: translateZ(0);
+  }
+}
+
+/* Remove the background gradients from buttons in the scroller. It's very costly to scroll these
+   around, because they are really just generated bitmaps, after all. You can use these same
+   rules to style the up/down/hover appearance of listview buttons in the scroller. If you
+   do want to use gradients - particularly if building a native or webapp, consider using gradient
+   images rather than CSS-generated gradients,  because they have been proven faster than CSS
+   gradients. If you are developing a website, using image gradients will increase the download
+   time, both due to the size of the images (but generally small) and the additional round-trip(s).
+
+   I eliminate text shadows as well, as these reportedly degrade performance on Android
+   browsers.
+*/
+
+.iscroll-content .ui-listview li.ui-btn-up-c
+  {
+  background-image: none;
+  text-shadow: none;
+  }
+
+.iscroll-content .ui-listview li.ui-btn-hover-c
+  {
+  background-image: none;
+  text-shadow: none;
+  }
+
+.iscroll-content .ui-listview li.ui-btn-down-c
+  {
+  background-image: none;
+  text-shadow: none;
+  }
+
+/* If you want to change the text color or other text properties of listview buttons in the scroller,
+   you have to do it here, not above.
+*/
+.iscroll-content .ui-listview *.ui-btn-up-c a.ui-link-inherit
+  {
+  }
+
+.iscroll-content .ui-listview *.ui-btn-hover-c a.ui-link-inherit
+  {
+  }
+
+.iscroll-content .ui-listview *.ui-btn-down-c a.ui-link-inherit
+  {
+  }
+
+/* Remove background image from non-button scroller content */
+.iscroll-content .ui-body-c
+  {
+  background-image: none;
+  }
+
+/***********************************************************************************************************************************************************************************************************************/  
+  
+  
+/*text styles*/
+.text1 {
+    font-family: "Myriad Pro";
+    font-size: 17px;
+    font-weight: normal;
+    color: #000;
+}
+
+.text2 {
+    text-align: left;
+    font-family: "Myriad Pro";
+    font-style: italic;
+    text-shadow: none;
+    color: #abb1b5;
+    font-weight: 200;
+}
+
+.label1 {
+    font-style: italic;font-size: 19px;color: #000;
+}
+
+/* Demonstrate how to make headers/footer a different height for different orientations
+   or screen sizes. This also demonstrates that the widget now (once again) measures the
+   headers/footers on every resize.
+
+   Unfortunately, the state of detecting mobile orientation on mobile devices is a mess.
+   Mobile Safari doesn't support orientation media query, while iPad doesn't. There are
+   various hacks involving max-width, max-height, max-device-width, etc. Fortunately, for
+   this demo, we can use something simple. We want the header and footer to be smaller
+   in landscape because they make the scrollable area too small. So, just test max-height.
+   This will of course also make the header/footer smaller on a desktop browser with
+   very short height - which makes it easy to demonstrate. :) */
+   
+   
+
+::-webkit-input-placeholder {
+   font-style: italic;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+   font-style: italic;  
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+   font-style: italic;
+}
+
+:-ms-input-placeholder {  
+   font-style: italic;
+}
+
+.ui-input-container{
+    width: 90%;
+    margin: auto;
+    text-align: center;
+}
+
+#login_page .ui-input-container{
+    width: 80%;
+    margin: auto;
+    text-align: center;
+}
+
+.ui-input-container label{
+    text-shadow: none;
+    color: #000;
+    text-align: left;
+    font-family: "Myriad Pro";
+    margin-top: 1.5em;
+}
+
+/*input text with icon style*/
+.ui-input-text-icon{
+    position: relative;
+}
+
+.ui-input-text-icon .ui-input-text{
+    border-radius: 3px;
+    border: 1px solid #000;
+}
+.ui-input-text-icon .ui-input-text input{
+    height: 40px;
+    padding-left: 40px;
+}
+
+.ui-input-text-icon img{
+    position: absolute;
+    bottom: 9px;
+    left: 10px;
+    width: 25px;
+    height: 25px;
+}
+
+/*button styles*/
+
+.ui-btn-red {
+    -moz-box-shadow: inset 0px -5px 0px 0px #963637;
+    -webkit-box-shadow: inset 0px -5px 0px 0px #963637;
+    box-shadow: inset 0px -5px 0px 0px #963637;
+    background-color: #d44c4c;
+    -webkit-border-top-left-radius: 6px;
+    -moz-border-radius-topleft: 6px;
+    border-top-left-radius: 6px;
+    -webkit-border-top-right-radius: 6px;
+    -moz-border-radius-topright: 6px;
+    border-top-right-radius: 6px;
+    -webkit-border-bottom-right-radius: 6px;
+    -moz-border-radius-bottomright: 6px;
+    border-bottom-right-radius: 6px;
+    -webkit-border-bottom-left-radius: 6px;
+    -moz-border-radius-bottomleft: 6px;
+    border-bottom-left-radius: 6px;
+    text-indent: 0;
+    border: 0px;
+    display: inline-block;
+    color: #fffdff !important;
+    font-family: "Myriad Pro";
+    font-size: 18px;
+    font-weight: normal !important;
+    font-style: normal;
+    /* height: 50px; */
+    /* line-height: 50px; */
+    /* width: 100px; */
+    text-decoration: none;
+    text-align: center;
+    text-shadow: none;
+    padding: 8px 15px;
+    margin-top: 35px;
+}
+
+.ui-btn-green {
+    -moz-box-shadow: inset 0px -5px 0px 0px #33937b;
+    -webkit-box-shadow: inset 0px -5px 0px 0px #33937b;
+    box-shadow: inset 0px -5px 0px 0px #33937b;
+    background-color: #48cfad;
+    -webkit-border-top-left-radius: 6px;
+    -moz-border-radius-topleft: 6px;
+    border-top-left-radius: 6px;
+    -webkit-border-top-right-radius: 6px;
+    -moz-border-radius-topright: 6px;
+    border-top-right-radius: 6px;
+    -webkit-border-bottom-right-radius: 6px;
+    -moz-border-radius-bottomright: 6px;
+    border-bottom-right-radius: 6px;
+    -webkit-border-bottom-left-radius: 6px;
+    -moz-border-radius-bottomleft: 6px;
+    border-bottom-left-radius: 6px;
+    text-indent: 0;
+    border: 0px;
+    display: inline-block;
+    color: #fffdff !important;
+    font-family: "Myriad Pro";
+    font-size: 18px;
+    font-weight: normal !important;
+    font-style: normal;
+    /* height: 50px; */
+    /* line-height: 50px; */
+    /* width: 100px; */
+    text-decoration: none;
+    text-align: center;
+    text-shadow: none;
+    padding: 8px 15px;
+    margin-top: 35px;
+}
+
+/*custom button with only image*/
+a.ui-btn-img {
+    background: #fff !important;
+    border: 0px !important;
+    padding: 0px !important;
+    border-radius: 18px !important;
+    box-shadow: none !important;
+    margin: 8px 5px !important;
+    width: 35px;
+    height: 35px;
+    opacity: 0.4;
+}
+
+a.ui-btn-img img{
+    width: 25px;
+    margin-top: 5px;
+}
+
+.ui-header a.ui-btn-img{
+    margin: 7px 7px 0 7px !important;
+}
+
+a.ui-btn-img1 {
+    background: #e0e0df !important;
+    border: 2px solid #e0e0df !important;
+    padding: 0px !important;
+    border-radius: 25px !important;
+    box-shadow: none !important;
+    margin: 4px auto !important;
+    width: 45px;
+    height: 45px;
+    opacity: 1;
+}
+
+a.ui-btn-img1-active{
+    border: 2px solid #d35342 !important; 
+}
+
+a.ui-btn-img1 img{
+    width: 35px;
+    height: 35px;
+    margin-top: 5px;
+}
+
+a.ui-btn-only-img {
+    background: none !important;
+    border: 0px !important;
+    padding: 0px !important;
+    border-radius: 0px !important;
+    box-shadow: none !important;
+    margin: 8px 5px;
+}
+
+
+
+.form_container{
+    text-align: center;
+    max-width: 500px;
+    width: 100%;
+    margin: auto;
+}
+
+#login_page .ui-content{
+    padding: 0px;
+}
+
+#login_page .form_container{
+    position: absolute;
+    top: 50%;
+    margin-top: -175px;
+}
+
+.terms_container{
+    border: 1px solid #fff;
+    padding: 5px 15px;
+    height: 90px;
+    overflow-y: scroll;
+}
+
+.ui-custom-checkbox1{
+    background: none !important;
+    text-shadow: none !important;
+    color: #abb1b5 !important;
+    border: 0px !important;
+    font-weight: normal !important;
+    font-size: 17px !important;
+    font-style: italic;
+}
+
+.ui-btn.ui-custom-checkbox1.ui-checkbox-on:after,
+.ui-btn.ui-custom-checkbox1.ui-checkbox-off:after{
+    position: absolute;
+    top: 50%;
+    margin-top: -15px;
+    left: 0px;
+    margin-left: 3px;
+    border-radius: 15px;
+    height: 30px;
+    width: 30px;
+    background-color: #dc3838;
+    border-color: #dc3838;
+    -webkit-border-radius: 15px;
+    opacity: 1;
+}
+
+a#forgot_password{
+    color: #428bca;
+    text-shadow: none;
+    font-size: 13px;
+    text-decoration: none;
+    line-height: 49px;
+}
+
+/*button switch Theme C*/
+.ui-page-theme-c .ui-btn, html .ui-bar-c .ui-btn, html .ui-body-c .ui-btn, html body .ui-group-theme-c .ui-btn, html head+body .ui-btn.ui-btn-c, .ui-page-theme-c .ui-btn:visited, html .ui-bar-c .ui-btn:visited, html .ui-body-c .ui-btn:visited, html body .ui-group-theme-c .ui-btn:visited, html head+body .ui-btn.ui-btn-c:visited {
+    background-color: #428bca;
+    border-color: #357ebd;
+    color: #fff;
+    text-shadow: 0 1px 0 #111;
+}
+
+.ui-bar-c {
+    background: #fff;
+}
+
+
+
+
+/*Custom Listviews*/
+
+.ui-listview-custom1 .ui-li-has-thumb {
+    height: 79px;
+    overflow: hidden;
+}
+.ui-listview-custom1 .ui-li-has-thumb a.ui-btn{
+    padding: 10px 5px 10px 150px;
+    max-height: 50px;
+}
+
+.ui-listview-custom1 .ui-li-has-thumb a.ui-btn h2{
+    margin: 0px;
+    padding-right: 55px;
+    font-weight: normal;
+}
+
+.ui-listview-custom1 .ui-li-has-thumb img.ui-li-userphoto{
+    width: 130px !important;
+    max-width: 130px !important;
+    height: 60px;
+    margin: 10px;
+}
+
+.ui-listview-custom1 .ui-li-has-thumb a.ui-btn .ui-li-aside{
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    color: #b1afaf;
+}
+.ui-listview-custom1 .ui-li-has-thumb div.ui-li-description{
+    margin-left: -70px;
+}
+.ui-listview-custom1 .ui-li-has-thumb div.ui-li-description,
+.ui-listview-custom1 .ui-li-has-thumb div.ui-li-description p{
+    font-size: 12px;
+    font-weight: normal;
+    white-space: normal;
+}
+.ui-listview-custom1 .ui-li-has-thumb div.ui-li-description img{
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+}
+
+
+.ui-listview-custom2 h2{
+    margin: 3px 0 !important;
+}
+
+.ui-listview-custom2 .ui-li-has-thumb a.ui-btn{
+    padding: 10px 5px 10px 80px;
+}
+
+.ui-listview-custom2 .ui-li-has-thumb img.ui-li-userphoto{
+    width: 60px;
+    height: 60px;
+    border-radius: 30px;
+    /* border: 1px solid; */
+    margin: 10px;
+}
+
+.ui-listview-custom2 .ui-li-has-thumb p.ui-li-description {
+    color: #a1a1a1;
+    margin: 2px 0;
+    font-size: 13px;
+}
+
+.ui-listview-custom2 .ui-li-has-thumb p.ui-li-aside{
+    background: #f0ad4e;
+    color: #fff;
+    padding: 3px 5px;
+    border-radius: 4px;
+    right: 1.5em;
+    text-shadow: none;                  
+}
+
+ul#setting_container{
+    list-style: none;
+    padding: 0px;
+    margin: 15px;
+}
+ul#setting_container li{
+    width: 100%;
+    margin: 15px 0;
+}
+
+ul#setting_container li div.ui-input-text{
+    width: 40px;
+    display: inline-block;
+    margin: 0 10px;
+    border-radius: 0px;
+    border: 0px;
+}
+
+ul#setting_container li.ui-setting-devide-line{
+    height: 5px;
+    background-color: #7a3e36;
+}
+ul#setting_container li h2{
+    margin: 0px;
+    padding: 10px;
+    color: #fff;
+    text-shadow: none;
+    font-weight: 500;
+    background: #353535;
+}
+
+ul#setting_container li span{
+    text-shadow: none;
+    font-size: 18px;
+    color: #b9b9b9;
+    padding: 0 10px;
+    font-weight: 100;
+}
+
+#setting_mile{
+    color: #f00;
+    background: #afafaf;
+    text-shadow: none;
+}
+
+.ui-image-container{
+    position: relative;
+    background: #fff;
+    padding: 10px;
+    width: 268px;
+    margin: 10px auto;
+    border-radius: 5px;
+}
+.ui-image-container img{
+    width: 268px;
+    height: 148px;
+}
+
+.ui-image-container .ui-heart-num{
+    margin-right: 5px;
+}
+.ui-image-container .ui-heart-num,
+.ui-image-container .ui-comment-num{
+    display: inline-block;
+}
+.ui-image-container .ui-heart-num img,
+.ui-image-container .ui-comment-num img{
+    position: relative;
+    top: 5px;
+    width: 25px;
+    height: 25px;
+}
+
+.ui-image-container .ui-heart-num span,
+.ui-image-container .ui-comment-num span{
+    color: #6d6e76;
+    padding: 0px 5px;
+    text-shadow: none;
+}
+
+.ui-image-container .ui-time-ago{
+    
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+    color: #646262;
+    font-weight: normal;
+    text-shadow: none;
+    font-size: 15px;
+}
+
+
+.ui-comment-info{
+    background: #fff;
+    padding: 10px;
+    border-radius: 3px;
+    height: 70px;
+    position: relative;
+    margin: 8px 0;
+}
+
+.ui-comment-info .ui-user-info{
+    width: 50px;
+    height: 70px;
+}
+
+.ui-comment-info .ui-user-info img{
+    width: 50px;
+    height: 50px;
+}
+
+.ui-comment-info .ui-user-info span{
+    display: block;
+    text-align: center;
+    color: #e98274;
+    font-size: 17px;
+}
+
+.ui-comment-info .ui-comment{
+    position: absolute;
+    top: 10px;
+    left: 70px;
+    right: 10px;
+    text-align: center;
+    color: #827d7d;
+    font-style: italic;
+    font-size: 20px;
+    height: 60px;
+    background: #e3e3e3;
+    padding: 5px;
+    text-shadow: none;
+}
+
+.ui-comment-info .ui-comment .ui-time-ago{
+    text-align: left;
+    color: #646262;
+    font-weight: normal;
+    text-shadow: none;
+    font-size: 15px;
+}
+
+.ui-heart-comment-btn-container{
+    text-align: center;
+}
+
+.ui-heart-comment-btn-container #add_heart,
+.ui-heart-comment-btn-container #add_comment{
+    width: 57px;
+    height: 52px;
+    display: inline-block;
+    margin: 10px 20px;
+}
+
+.ui-map-container {
+    width: 100%;
+    height: 220px;
+    background: #fff;
+    border-radius: 5px;
+}
+
+.ui-bars-container .ui-bar-info{
+    height: 68px;
+    background: #fff;
+    padding: 10px 20px;
+    margin-top: 10px;
+    letter-spacing: -1px;
+    border-radius: 5px;
+}
+
+.ui-bars-container .ui-bar-info a{
+    text-decoration: none !important;
+    font-weight: normal !important;
+    color: #222222;
+}
+.ui-bars-container .ui-bar-info a span{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+h2.ui-bar-name{
+    width: 100%;
+    color: #df4430;
+    font-size: 18px;
+    font-weight: normal;
+    font-style: italic;
+    text-shadow: none;
+    margin: 10px 0px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.ui-bars-container .ui-bar-info .ui-bar-spec .ui-bar-open,
+.ui-bars-container .ui-bar-info .ui-bar-spec .ui-bar-close{
+    width: 28%;
+}
+.ui-bar-open div.ui-status-icon{
+    width: 15px;
+    height: 15px;
+    border-radius: 8px;
+    background: #6ea25a;
+    display: inline-block;
+}
+
+.ui-bar-open span{
+    color: #6ea25a;
+    font-size: 15px;
+    text-shadow: none;
+}
+
+ .ui-bar-close div.ui-status-icon{
+    width: 15px;
+    height: 15px;
+    border-radius: 8px;
+    background: #de432f;
+    display: inline-block;
+}
+.ui-bar-close span{
+    color: #de432f;
+    font-size: 15px;
+    text-shadow: none;
+}
+
+.ui-bars-container .ui-bar-spec .ui-bar-hot{
+    width: 42%;
+}
+
+.ui-bars-container .ui-bar-spec .ui-bar-hot img{
+    width: 25px;
+    height: 20px;
+}
+.ui-bars-container .ui-bar-spec .ui-bar-hot span{
+    font-size: 15px;
+    text-shadow: none;
+}
+
+.ui-bars-container .ui-bar-spec .ui-bar-distance{
+    width: 30%;
+}
+
+.ui-bars-container .ui-bar-spec .ui-bar-distance img{
+    width: 25px;
+    height: 20px;
+}
+.ui-bars-container .ui-bar-spec .ui-bar-distance span{
+    font-size: 15px;
+    text-shadow: none;
+    color: #0398c3;
+}
+
+#barsdetail_info_container {
+    background: #fff;
+    margin-top: 15px;
+    padding: 10px 15px;
+    letter-spacing: -1px;
+    border-radius: 5px;
+}
+.ui-bar-address {
+    text-shadow: none;
+    font-size: 16px;
+    font-style: italic;
+    margin: 0px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.ui-bar-netaddr img,
+.ui-bar-phonenum img{
+    width: 20px;
+    height: 20px;
+    position: relative;
+    top: 4px;
+    margin-right: 5px;
+}
+.ui-bar-netaddr span,
+.ui-bar-phonenum span{
+    letter-spacing: 0px;
+    color: #379ee6;
+}
+
+.ui-bar-rate{
+    font-size: 20px;
+}
+
+.ui-bar-rate img{
+    width: 25px;
+    height: 35px;
+    position: relative;
+    top: 5px;
+}
+.ui-bar-rate span{
+    margin-left: 10px;
+}
+
+.ui-bar-status-time {
+    text-align: center;
+}
+.ui-bar-status-time .ui-bar-open,
+.ui-bar-status-time .ui-bar-close{
+    display: inline-block;
+}
+
+.ui-bar-status-time .ui-bar-time{
+    font-style: italic;
+    text-shadow: none;
+    letter-spacing: 0;
+    margin-left: 5px;
+}
+
+.ui-bar-carousel{
+    width: 258px;
+    height: 50px;
+    margin: 15px 0 !important;
+}
+
+.ui-bar-carousel .swiper-slide img{
+    width: 100%;
+    height: 100%;
+}
+
+.ui-bar-carousel .pagination {
+    position: absolute;
+    z-index: 20;
+    left: 10px;
+    bottom: 10px;
+}
+
+.ui-red-line{
+    height: 3px;
+    background-color: #fc6e51;
+}
+.ui-green-line{
+    height: 3px;
+    background-color: #48cfad;
+}
+
+#profile_container{
+    position: relative;
+    background: #fff;
+    border-radius: 3px;
+    height: 80px;
+    overflow: hidden;
+}
+#profile_container>div{
+    text-align: center;
+}
+#profile_container div.ui-block-a{
+    position: relative;
+    height: 78px;
+    margin: 1px;
+    background-image: url(../images/profile_bg.png);
+    background-repeat: no-repeat;
+    background-position: top left;
+    background-size: 100% 100%;
+}
+
+#profile_container div.ui-block-a img#user_photo{
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    top: 50%;
+    margin-top: -25px;
+    left: 50%;
+    margin-left: -25px;
+    border-radius: 25px;
+}
+
+#profile_container p{
+    font-size: 15px;
+    text-align: center;
+    margin: 5px 0;
+    line-height: 15px;
+}
+
+#profile_container .ui-btn-red,
+#profile_container .ui-btn-green{
+    margin-top: 5px;
+    font-size: 15px;
+    padding: 5px 0px;
+    width: 95%;
+    font-weight: normal !important;
+}
+
+#edit_profile_container{
+    background: #fff;
+    padding: 25px 0px;
+    border-radius: 5px;
+}
+
+#preview_user_photo{
+    text-align: center;
+}
+
+#preview_user_photo img{
+    width: 80px;
+    height: 80px;
+    margin: auto;
+}
+#edit_profile_container #user_take_photo,
+#edit_profile_container #user_choose_photo{
+    font-size: 15px;
+    font-weight: normal !important;
+    margin-top: 15px;
+    padding: 8px 10px;
+}
+
+#popup_change_password{
+    padding: 0 20px 20px;
+}
+
+.ui-points-info{
+    background: #fff;
+    border-radius: 3px;
+    margin: 10px 0px;
+}
+.ui-points-info .ui-bar-name{
+    font-family: 'Pacifico';
+    color: #d44c4c;
+    font-size: 20px;
+}
+
+.points_progress_bar{
+    position: relative;
+    width: 90%;
+    height: 6px;
+    background-color: #696565;
+    border-radius: 3px;
+    margin: 10px auto;
+}
+
+.real_points_bar{
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    height: 4px;
+    width: 50%;
+    background: #d44c4c;
+    border-radius: 3px;
+}
+.ui-points-remain-text{
+    display: inline-block;
+    margin: 0px 0px 15px;
+    font-size: 15px;
+    text-align: center;
+    width: 100%;
+    font-style: italic;
+    color: #787676;
+}
+
+#camera_container {
+    padding: 10px;
+    background: #fff;
+    border-radius: 5px;
+}
+
+#camera_container img{
+    width: 100%;
+}
+
+
+/*.ui-btn.ui-custom-checkbox1.ui-checkbox-on:after{
+    position: absolute;
+    top: 50%;
+    margin-top: -15px;
+    left: 0px;
+    margin-left: 3px;
+    background-color: #dc3838;
+    border-radius: 15px;
+    height: 30px;
+    width: 30px;
+    border-color: #dc3838;
+}*/
