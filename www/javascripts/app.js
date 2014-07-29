@@ -2,8 +2,6 @@
 
 var email_pattern=/^([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+/;
 var server_url = "http://192.168.0.41/projects/dubstep_server/";
-//var server_url = "http://new-techsoft.com/jin/work/PhotoSharing/apis/";
-//var server_url = "http://dplsystems.com.au/test/PhotoSharingApp/apis/";
 
 
 // The Mobile Safari Forms Assistant pushes the page up if it needs to scroll, but jQuery Mobile
@@ -76,6 +74,15 @@ $(document).delegate(".fastclick", "vclick click", function(event) {
     });
 });*/
 
+$(document).on("pageinit", function(event) {
+    //alert("pageinit");
+
+    //if (navigator.userAgent.match(/(iPad|iPhone);.*CPU.*OS 7_\d/i)) {
+        $("body").addClass("ios7");
+        $('body').append('<div id="ios7statusbar"/>');
+    //}
+});
+
 
 function popup_alert(msg){
     alert(msg);
@@ -110,7 +117,7 @@ function onDeviceReady(){
 
     //setStorage("UserUID", "");
 
-    if(navigator.geolocation) {
+    /*if(navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
             var latlng = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
             var geocoder = new google.maps.Geocoder();
@@ -133,7 +140,7 @@ function onDeviceReady(){
     } else {
         // Browser doesn't support Geolocation
         console.log('Error: Your browser doesn\'t support geolocation.');
-    }
+    }*/
 }
 
 $(document).on("pagebeforeshow", "#login_page", function(){
@@ -145,6 +152,10 @@ $(document).on("pagebeforeshow", "#login_page", function(){
 
 $(document).on("click", "#btn_login", function(){
 
+
+    //$.mobile.changePage("home.html", {transition: "slide", changeHash: true});
+
+/**/
     var $username = $("#login_username").val(),
         $password = $("#login_password").val();
     
@@ -170,7 +181,7 @@ $(document).on("click", "#btn_login", function(){
                 $("#login_username").val("");
                 $("#login_password").val("");
                 popup_alert(result_array['uid']);
-                //$.mobile.changePage("home.html", {transition: "slideup", changeHash: true});
+                $.mobile.changePage("home.html", {transition: "slide", changeHash: true});
             }
             else {
                 popup_alert(result_array['message']);
@@ -178,7 +189,7 @@ $(document).on("click", "#btn_login", function(){
             
         });
     }
-    
+/**/
 });
 
 $(document).on("click", "#btn_register", function(){
