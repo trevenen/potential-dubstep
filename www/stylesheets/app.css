@@ -91,9 +91,7 @@ body {
 }
 
 .ui-footer{
-    background-color: #fff !important;
-    border-top: 5px solid #de432f !important;
-    border-bottom: 7px solid #231b1a !important;
+    
 }
 
 /* Style iScroll wrapper with a 1px green border at top and bottom. You should see no gap
@@ -222,7 +220,7 @@ body {
 /* If you want to change the text color or other text properties of listview buttons in the scroller,
    you have to do it here, not above.
 */
-.iscroll-content .ui-listview *.ui-btn-up-c a.ui-link-inherit
+.iscroll-content .ui-listview *.ui-btn-upc a-.ui-link-inherit
   {
   }
 
@@ -290,7 +288,7 @@ body {
    font-style: italic;
 }
 
-:-ms-input-placeholder {  
+:-ms-input-placeholder {
    font-style: italic;
 }
 
@@ -311,7 +309,7 @@ body {
     color: #000;
     text-align: left;
     font-family: "Myriad Pro";
-    margin-top: 1.5em;
+    margin-top: 1em;
 }
 
 /*input text with icon style*/
@@ -321,7 +319,8 @@ body {
 
 .ui-input-text-icon .ui-input-text{
     border-radius: 3px;
-    border: 1px solid #000;
+    border: 1px solid #6E7930;
+    box-shadow: none;
 }
 .ui-input-text-icon .ui-input-text input{
     height: 40px;
@@ -475,9 +474,23 @@ a.ui-btn-only-img {
 }
 
 #login_page .form_container{
+    width: 90%;
     position: absolute;
     top: 50%;
     margin-top: -175px;
+    margin-left: 5%;
+    height: 340px;
+    padding-top: 20px;
+    background: rgba(224,229,191,0.6);
+    border-radius: 10px;
+    border: 2px solid #E0E6BF;
+}
+
+@media only screen and (min-width: 510px){
+    #login_page .form_container{
+        margin-left: -250px !important;
+        left: 50% !important;
+    }
 }
 
 .terms_container{
@@ -1071,6 +1084,25 @@ h2.ui-bar-name{
 
 #camera_container img{
     width: 100%;
+}
+
+
+#ios7statusbar
+{
+    width:100%;
+    height:20px;
+    background: none;
+    position:fixed;
+    z-index:1000;
+}
+
+.ios7 .ui-page
+{
+    /*margin-top: 20px;*/
+}
+.ios7 .ui-header{
+    /*top: 20px;*/
+    padding-top: 20px !important;
 }
 
 
